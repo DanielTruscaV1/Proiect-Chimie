@@ -16,7 +16,28 @@
   {
     router.push(`${path}`);
   }
-  
+
+  import { onMounted, onUnmounted } from 'vue';
+  import EventBus from './EventBus.js';
+
+  const theme = ref(localStorage.getItem('theme') || '');
+
+  // Listen for changes in local storage when the component is mounted
+  onMounted(() => {
+    window.addEventListener('storage', handleLocalStorageChange);
+  });
+
+  // Remove the event listener when the component is unmounted
+  onUnmounted(() => {
+    window.removeEventListener('storage', handleLocalStorageChange);
+  });
+
+  // Define a function to handle changes in local storage
+  const handleLocalStorageChange = (event) => {
+    if (event.key === 'theme') {
+      EventBus.emit('localStorageChanged', event.newValue);
+    }
+  };
 </script>
 
 <template>
@@ -25,19 +46,24 @@
   </button>
   <section id="menu" v-if="show_menu">
     <button>
-      <img src="../src/assets/icons5.png"/>
+      <img src="../src/assets/icons6.png" v-if="theme == 'white'"/>
+      <img src="../src/assets/icons66.png" v-if="theme == 'black'"/>
     </button>
     <button>
-      <img src="../src/assets/icons4.png"/>
+      <img src="../src/assets/icons4.png" v-if="theme == 'white'"/>
+      <img src="../src/assets/icons44.png" v-if="theme == 'black'"/>
     </button>
     <button>
-      <img src="../src/assets/icons3.png"/>
+      <img src="../src/assets/icons3.png" v-if="theme == 'white'"/>
+      <img src="../src/assets/icons33.png" v-if="theme == 'black'"/>
     </button>
     <button>
-      <img src="../src/assets/icons2.png"/>
+      <img src="../src/assets/icons2.png" v-if="theme == 'white'"/>
+      <img src="../src/assets/icons22.png" v-if="theme == 'black'"/>
     </button>
     <button @click="go_to('profile')">
-      <img src="../src/assets/icons1.png"/>
+      <img src="../src/assets/icons1.png" v-if="theme == 'white'"/>
+      <img src="../src/assets/icons11.png" v-if="theme == 'black'"/>
     </button>
   </section>
   <RouterView/>
@@ -58,7 +84,7 @@
     width:6vw;
     height:87vh;
     /* From https://css.glass */
-    background: white;
+    background: var(--color12);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(7px);
@@ -92,6 +118,7 @@
       background:transparent;
       border:none;
       cursor:pointer;
+      color:var(--font_color11);
     }
     #navigation 
     {

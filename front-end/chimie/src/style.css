@@ -1,8 +1,15 @@
+:root 
+{
+    --color11:#dddddd;
+    --color12:white;
+    --font_color11:black;
+}
 body 
 {
     margin:0px;
-    background-color:#DDDDDD;
+    background-color:var(--color11);
     font-family:Arial, Helvetica, sans-serif;
+    color:var(--font_color11);
 }
 h1 
 {
