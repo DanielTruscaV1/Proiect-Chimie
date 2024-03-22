@@ -1,26 +1,6 @@
 <script setup>
     import {ref} from "vue";
 
-    const theme = ref();
-
-    function change_theme()
-    {
-        if(theme.value == 2)
-        {
-            document.documentElement.style.setProperty('--color11', 'rgb(30, 30, 40)');
-            document.documentElement.style.setProperty('--color12', 'rgb(60, 60, 70)');
-            document.documentElement.style.setProperty('--font_color11', 'white');
-            localStorage.setItem('theme', 'black');
-        }
-        else if(theme.value == 1)
-        {
-            document.documentElement.style.setProperty('--color11', '#dddddd');
-            document.documentElement.style.setProperty('--color12', 'white');
-            document.documentElement.style.setProperty('--font_color11', 'black');
-            localStorage.setItem('theme', 'white');
-        }
-    }
-
     import {onMounted, onUnmounted } from 'vue';
     import EventBus from '../EventBus.js';
 
@@ -37,6 +17,21 @@
     const handleLocalStorageChange = (newValue) => {
     localStorageValue.value = newValue;
     };
+
+    import {useStore} from "vuex";
+
+    const store = useStore();
+
+    const theme = ref(store.state.theme);
+
+    function toggle()
+    {
+        const new_theme_value = store.state.theme == 'white' ? 'black' : 'white';
+        theme.value = new_theme_value;
+        store.commit("toggle", new_theme_value);
+        console.log(theme.value);
+    }
+
 </script>
 
 <template>
@@ -58,7 +53,7 @@
         <h1>
             Setări
         </h1>
-        <select @change="change_theme" v-model="theme">
+        <select @change="toggle">
             <option value="1">
                 Temă luminoasă
             </option>
